@@ -5,7 +5,6 @@ import io from "socket.io-client";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ButtonBlock from '../components/Multiplayer/ButtonBlock';
-import { set } from 'mongoose';
 
 const Main = ({ params }) => {
     const { id } = params;
