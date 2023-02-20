@@ -11,7 +11,7 @@ const CreateRoom = () => {
   const [ URL, setURL ] = useState('')
 
   const handleClick = async () => {
-    await fetch('http://localhost:3000/api/room', {
+    await fetch('/api/room', {
       method: 'POST',
       cache: 'no-store'
     }).then(setLoading(true))
