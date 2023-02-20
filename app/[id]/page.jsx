@@ -59,7 +59,10 @@ const Main = ({ params }) => {
                     setPlayerList(list);
                 }
                 if (_room.players.length > 0) {
+                    console.log(JSON.parse(_room.players[_room.moveNumber % 2]))
                     setTurn(JSON.parse(_room.players[_room.moveNumber % 2]));
+                } else {
+                    console.log('not yet')
                 }
                 setGrid(_room.playerGrid);
                 setLoading(false);
