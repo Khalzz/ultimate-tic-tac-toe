@@ -10,10 +10,16 @@
   },
   "dependencies": {
     "@next/font": "13.1.5",
+    "@prisma/client": "^4.9.0",
+    "bson": "^5.0.0",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.5",
     "next": "13.1.5",
+    "prisma": "^4.9.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0",
+    "socket.io": "^4.5.4",
+    "socket.io-client": "^4.5.4"
   }
 }

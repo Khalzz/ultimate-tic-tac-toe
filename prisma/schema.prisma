@@ -1,0 +1,19 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Rooms {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  players String[] // the names of the players in the room
+  moveNumber Int @default(0) // from 0 to 8 is the actual "move" (if this%2 == 0: is player 1 turn, else is player 2 turn)
+  playerGrid Int[]  // the grid based on player turn (0-1-2) 
+  baseGrid Int[] // the grid that shows the "movements" {(0,0,0,0,0,0,0,0,0)} - {(1,2,3,4,5,6,7,8,9)}
+}
