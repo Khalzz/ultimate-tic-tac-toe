@@ -150,3 +150,15 @@
     color: #C3073F;
     margin-bottom: 2em;
 }
+
+.backButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 5em;
+    height: 5em;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}

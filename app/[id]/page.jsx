@@ -3,6 +3,7 @@ import styles from './../styles.module.css';
 import { useEffect, useState, useRef, Component} from "react";
 import io from "socket.io-client";
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ButtonBlock from '../components/Multiplayer/ButtonBlock';
 
@@ -124,6 +125,9 @@ const Main = ({ params }) => {
                 </main>)
         } else if (name && !error && playerList.length < 2) {
             return (<main className={styles.background}>
+                <Link href="/" className={styles.backButton}>
+                    <Image src='/BackButton.svg' alt='Ups' fill="true"></Image>
+                </Link>
                 <div className={styles.menuRoom}>
                     <h5 className={styles.titleRoom}>send this to your friend</h5>
                     <h4 className={styles.roomId}>{id}</h4>
@@ -161,6 +165,9 @@ const Main = ({ params }) => {
                 components.push(<ButtonBlock key={i} style={{gridColumn: ((i % 3) + 1), gridRow: (Math.floor(i / 3) + 1)}} x={i} socket={socket} room={room} state={room.playerGrid[i]} changer={changeState}/>);
             }
             return (<main className={styles.background}>
+                <Link href="/" className={styles.backButton}>
+                    <Image src='/BackButton.svg' alt='Ups' fill="true"></Image>
+                </Link>
                 {localStorage.getItem('user') === turn ? (
                     <>
                         <h2>Your Turn</h2>
@@ -179,26 +186,27 @@ const Main = ({ params }) => {
                 </div>
             </main>)
         } else if (endGame != null) {
+            let message = <></>
             if (endGame == 'draw') {
-                return (<main className={styles.background}>
-                    <h2>Game Draw</h2>
-                </main>);
+                message = <h2>Game Draw</h2>
             } else {
-                let message = <></>
                 if (name == JSON.parse(endGame)) {
                     message = <h2 className={styles.winner}>You Won!!!</h2>
                 } else {
                     message = <h2 className={styles.looser}>You Loose!!!</h2>
                 }
-                return (<main className={styles.background}>
-                    <div className={styles.menuRoom}>
-                        {message}
-                        <button className={styles.Button} onClick={() => {
-                            socket.emit('restart', id)
-                        }}>Restart</button>
-                    </div>
-                </main>);
             }
+            return (<main className={styles.background}>
+                <Link href="/" className={styles.backButton}>
+                    <Image src='/BackButton.svg' alt='Ups' fill="true"></Image>
+                </Link>
+                <div className={styles.menuRoom}>
+                    {message}
+                    <button className={styles.Button} onClick={() => {
+                        socket.emit('restart', id)
+                    }}>Restart</button>
+                </div>
+            </main>);
         }
     } else {
         return (<main className={styles.background}>
