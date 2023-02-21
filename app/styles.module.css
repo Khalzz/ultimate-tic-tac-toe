@@ -140,3 +140,13 @@
     position: absolute;
     background-color: rgba(0, 0, 0, 0.40);
 }
+
+.winner {
+    color: #29B6F6;
+    margin-bottom: 2em;
+}
+
+.looser {
+    color: #C3073F;
+    margin-bottom: 2em;
+}

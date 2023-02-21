@@ -36,10 +36,8 @@ const Main = ({ params }) => {
                 setName(user);
                 if (user) {
                     _socket.emit('set-player', user, id);
-                    console.log('you have a name');
                 } else {
                     _socket.emit('check-room', id);
-                    console.log('you dont have a name');
                 }
             });
 
@@ -59,10 +57,7 @@ const Main = ({ params }) => {
                     setPlayerList(list);
                 }
                 if (_room.players.length > 0) {
-                    console.log(JSON.parse(_room.players[_room.moveNumber % 2]))
                     setTurn(JSON.parse(_room.players[_room.moveNumber % 2]));
-                } else {
-                    console.log('not yet')
                 }
                 setGrid(_room.playerGrid);
                 setLoading(false);
@@ -72,11 +67,9 @@ const Main = ({ params }) => {
                 // tengo que permitir que hayan errores
                 setError(error);
                 setLoading(false);
-                console.log(error);
             })
 
             _socket.on('player-turn', (returnedPlayer) => {
-                console.log(returnedPlayer)
                 setTurn(JSON.parse(returnedPlayer))
             })
 
@@ -84,14 +77,16 @@ const Main = ({ params }) => {
                 setRoom(grid);
                 setGrid(grid.playerGrid)
                 _socket.emit('get-turn', grid.id)
-                console.log(grid)
             })
 
             _socket.on('return-winner', (winner) => {
-                console.log('the winner is:', winner)
                 if (winner) {
                     setEndGame(winner);
                 }
+            })
+
+            _socket.on('restarted', () => {
+                setEndGame();
             })
 
             setSocket(_socket)
@@ -189,8 +184,19 @@ const Main = ({ params }) => {
                     <h2>Game Draw</h2>
                 </main>);
             } else {
+                let message = <></>
+                if (name == JSON.parse(endGame)) {
+                    message = <h2 className={styles.winner}>You Won!!!</h2>
+                } else {
+                    message = <h2 className={styles.looser}>You Loose!!!</h2>
+                }
                 return (<main className={styles.background}>
-                    <h2>{JSON.parse(JSON.parse(endGame)).username} won!!!</h2>
+                    <div className={styles.menuRoom}>
+                        {message}
+                        <button className={styles.Button} onClick={() => {
+                            socket.emit('restart', id)
+                        }}>Restart</button>
+                    </div>
                 </main>);
             }
         }

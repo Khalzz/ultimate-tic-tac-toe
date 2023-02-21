@@ -51,6 +51,12 @@ const SocketHandler = (req, res) => {
 
       io.on('connection', socket => {
         socket.on('connect-room', (roomId) => {
+          // this is to leave every room before connecting to a new one
+          for (const room of socket.rooms) {
+            if (room !== socket.id) {
+              socket.leave(room);
+            }
+          }
           socket.join(roomId)
         })
 
@@ -164,6 +170,35 @@ const SocketHandler = (req, res) => {
 
           } catch (error) {
             console.log(error.message)
+          }
+        })
+
+        socket.on('restart', async (roomId) => {
+          try {
+            const check = await prisma.rooms.findUnique({
+              where: {
+                id: roomId
+              }
+            })
+
+            const randomList = check.players.sort(() => {
+              return Math.random() - 0.5;
+            })
+            const update = await prisma.rooms.update({
+              where: {
+                id: roomId
+              },
+              data: {
+                players: randomList,
+                moveNumber: 0,
+                playerGrid: [0,0,0,0,0,0,0,0,0],
+                baseGrid: [0,0,0,0,0,0,0,0,0],
+              },
+            });
+            io.to(roomId).emit('return-room', update)
+            io.to(roomId).emit('restarted')
+          } catch (error) {
+
           }
         })
       });
