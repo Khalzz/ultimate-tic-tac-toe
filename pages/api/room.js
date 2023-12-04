@@ -12,10 +12,10 @@ const roomsHandler = async (req, res) => {
                   baseGrid: [0,0,0,0,0,0,0,0,0]
                 }
             });
-            console.log(room)
             res.status(200).send(room)
         } catch (error) {
-            res.status(400).send('upsi')
+            console.log(error)
+            res.status(400).send({error: {message: "the room wasn't made", reason: error}})
         }
     }
 }

@@ -110,7 +110,7 @@ const Main = ({ params }) => {
                 <main className={styles.background}>
                     <form className={styles.menu}>
                         <h3 className={styles.text}>set your Username</h3>
-                        <input className={styles.textInput} placeholder='ID' name="id" onChange={e => tempUsername = e.target.value}></input>
+                        <input className={styles.textInput} placeholder='Name' name="id" onChange={e => tempUsername = e.target.value}></input>
                         <button className={styles.Button} onClick={() => {
                             setLoading(true);
                             setName(tempUsername);
