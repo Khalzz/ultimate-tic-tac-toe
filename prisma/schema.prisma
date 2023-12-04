@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model rooms {
+model Rooms {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   players String[] // the names of the players in the room
   moveNumber Int @default(0) // from 0 to 8 is the actual "move" (if this%2 == 0: is player 1 turn, else is player 2 turn)
