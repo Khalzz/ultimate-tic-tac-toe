@@ -17,7 +17,10 @@ const CreateRoom = () => {
     }).then(setLoading(true))
     .then((response) => {
       return response.json()})
-    .then((json) => router.push(json.id))
+    .then((json) => {
+      console.log(json)
+      router.push(json.id)
+    })
   }
 
   if (!loading) {
