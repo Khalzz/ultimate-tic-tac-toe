@@ -27,7 +27,7 @@ const Main = ({ params }) => {
             next: {
                 revalidate: 3,
             },
-        }).finally(() => {
+        }).finally(async () => {
             const user = localStorage.getItem('user');
             const _socket = io(); // here i will use this so i dont have that awfull warning
             _socket.emit('connect-room', id)
@@ -52,7 +52,7 @@ const Main = ({ params }) => {
             _socket.on('return-room', (_room) => {
                 setRoom(_room);
                 let list = [];
-                _room.players.forEach(player => list.push(JSON.parse(JSON.parse(player))));
+                _room.players.forEach(player => list.push(JSON.parse(player)));
                 if (list != playerList) {
                     setPlayerList(list);
                 }
@@ -89,7 +89,7 @@ const Main = ({ params }) => {
 
             setSocket(_socket)
         });
-      
+
         return () => {
 
         };
