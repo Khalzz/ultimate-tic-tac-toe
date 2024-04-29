@@ -115,7 +115,6 @@ const Main = ({ params }) => {
                             'identifier': Math.random()
                         }
                         localStorage.setItem('user', JSON.stringify(user));
-                        location.reload();
                     }}>Join Room</button>
                 </form>
             </main>)
