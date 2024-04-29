@@ -109,12 +109,12 @@ const Main = ({ params }) => {
                     <h3 className={styles.text}>set your Username</h3>
                     <input className={styles.textInput} placeholder='Name' name="id" onChange={e => tempUsername = e.target.value}></input>
                     <button className={styles.Button} onClick={() => {
-                        setName(tempUsername);
                         const user = {
                             'username': tempUsername,
                             'identifier': Math.random()
                         }
-                        localStorage.setItem('user', JSON.stringify(user));
+                        window !== "undefined" ? localStorage.setItem('user', JSON.stringify(user)) : undefined
+                        setName(tempUsername);
                     }}>Join Room</button>
                 </form>
             </main>)
