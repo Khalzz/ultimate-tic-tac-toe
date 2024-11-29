@@ -1,11 +1,14 @@
 "use client";
 import styles from './../styles.module.css';
-import { useEffect, useState, useRef, Component} from "react";
+import { useEffect, useState} from "react";
 import io from "socket.io-client";
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ButtonBlock from '../components/Multiplayer/ButtonBlock';
+import SetUsername from '../components/Multiplayer/SetUsername';
+import Lobby from '../components/Multiplayer/Lobby';
+import Game from '../components/Multiplayer/Game';
 
 const Main = ({ params }) => {
     const { id } = params;
@@ -22,6 +25,11 @@ const Main = ({ params }) => {
     const [ endGame, setEndGame ] = useState(null);
 
     useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            setName(user);
+        }
+
         // this will be called twice because next comes with react strict mode on
         fetch("/api/socket", {
             next: {
@@ -30,10 +38,13 @@ const Main = ({ params }) => {
         }).finally(async () => {
             const user = localStorage.getItem('user');
             const _socket = io(); // here i will use this so i dont have that awfull warning
+
             _socket.emit('connect-room', id)
             _socket.emit('check-winner', id)
+
             _socket.on("connect", () => {
                 setName(user);
+
                 if (user) {
                     _socket.emit('set-player', user, id);
                 } else {
@@ -95,58 +106,23 @@ const Main = ({ params }) => {
         };
     }, []);
 
-    let tempUsername;
+    
 
     if (error) {
         return (<main className={styles.background}>
             <h4>Ups: {error}</h4>
         </main>)
     }
-    if (!name && !error) {
-        return (
-            <main className={styles.background}>
-                <form className={styles.menu}>
-                    <h3 className={styles.text}>set your Username</h3>
-                    <input className={styles.textInput} placeholder='Name' name="id" onChange={e => tempUsername = e.target.value}></input>
-                    <button className={styles.Button} onClick={() => {
-                        const user = {
-                            'username': tempUsername,
-                            'identifier': Math.random()
-                        }
-                        window !== "undefined" ? localStorage.setItem('user', JSON.stringify(user)) : undefined
-                        setName(tempUsername);
-                    }}>Join Room</button>
-                </form>
-            </main>)
-    } else if (name && !error && playerList.length < 2) {
-        return (<main className={styles.background}>
-            <Link href="/" className={styles.backButton}>
-                <Image src='/BackButton.svg' alt='Ups' fill="true"></Image>
-            </Link>
-            <div className={styles.menuRoom}>
-                <h5 className={styles.titleRoom}>send this to your friend</h5>
-                <h4 className={styles.roomId}>{id}</h4>
-                
-                <ul className={styles.list}>
-                    {   playerList.length === 1 ? (
-                        playerList.map(({ username, identifier }) => {
-                            return ( <li key={identifier} className={styles.nolist}>
-                                <div className={styles.player} key={identifier}>{username} (ready)</div>
-                                <div className={styles.waiting} key="0">Waiting...</div>
-                            </li>)
-                        })
-                    ) : playerList.length === 2 ? (
-                        playerList.map(({ username, identifier }) => {
-                            return (<li className={styles.player} key={identifier}>{username} (ready)</li>)
-                        })
-                    ) : (
-                        <li className={styles.waiting} key="0">Waiting Players...</li>
-                    )}
-                </ul>
-            </div>
-
+    
+    return (
+        <main>
+            <SetUsername name={name} error={error}/>
+            <Lobby name={name} error={error} playerList={playerList} roomId={id}/>
+            <Game playerList={playerList} endGame={endGame} socket={socket} room={room} turn={turn}/>
         </main>)
-    } else if (playerList.length == 2 && endGame == null) {
+
+
+    if (playerList.length == 2 && endGame == null) {
         const components = [];
 
         const changeState = (x, playerValue) => {
@@ -203,7 +179,6 @@ const Main = ({ params }) => {
             </div>
         </main>);
     }
-} 
-
+}
 
 export default Main;
